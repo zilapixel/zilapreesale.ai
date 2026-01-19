@@ -1,51 +1,42 @@
-* {
-  box-sizing: border-box;
-}
-
 body {
   margin: 0;
-  font-family: Inter, system-ui, sans-serif;
-  background: #000;
-  color: #fff;
+  font-family: Arial, sans-serif;
+  color: white;
+  background: black;
 }
 
-#three-bg {
+canvas {
   position: fixed;
   inset: 0;
   z-index: -1;
 }
 
-.nav {
+header {
   display: flex;
   justify-content: space-between;
-  padding: 16px 24px;
-  background: rgba(0,0,0,0.6);
-  backdrop-filter: blur(10px);
+  padding: 20px;
 }
 
-button {
-  padding: 12px 18px;
-  border-radius: 10px;
-  border: none;
-  background: linear-gradient(135deg,#6cf,#39f);
-  color: #000;
-  font-weight: 700;
-  cursor: pointer;
+.token {
+  width: 200px;
+  animation: spin 10s linear infinite;
 }
 
-.card {
-  max-width: 420px;
-  margin: 80px auto;
-  padding: 24px;
-  background: rgba(255,255,255,0.08);
-  backdrop-filter: blur(20px);
-  border-radius: 20px;
+@keyframes spin {
+  100% { transform: rotateY(360deg); }
 }
 
-input {
-  width: 100%;
-  padding: 12px;
+.chart .bars div {
+  background: rgba(255,255,255,0.1);
   margin: 10px 0;
-  border-radius: 10px;
-  border: none;
+  padding: 10px;
+}
+
+.support, .admin {
+  padding: 20px;
+  background: rgba(0,0,0,0.6);
+}
+
+.hidden {
+  display: none;
 }
