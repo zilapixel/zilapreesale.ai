@@ -1,40 +1,29 @@
-const scene = new THREE.Scene()
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000)
-const renderer = new THREE.WebGLRenderer({ alpha: true })
+import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.155/build/three.module.js";
 
-renderer.setSize(window.innerWidth, window.innerHeight)
-document.getElementById("three-bg").appendChild(renderer.domElement)
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, innerWidth/innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({ canvas: bg, alpha: true });
 
-camera.position.z = 5
+renderer.setSize(innerWidth, innerHeight);
+camera.position.z = 5;
 
-const geometry = new THREE.BufferGeometry()
-const count = 1500
-const positions = new Float32Array(count * 3)
+const geometry = new THREE.BufferGeometry();
+const count = 2000;
+const positions = new Float32Array(count * 3);
 
 for (let i = 0; i < count * 3; i++) {
-  positions[i] = (Math.random() - 0.5) * 10
+  positions[i] = (Math.random() - 0.5) * 50;
 }
 
-geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3))
+geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+const material = new THREE.PointsMaterial({ color: 0x00ffff, size: 0.05 });
+const particles = new THREE.Points(geometry, material);
 
-const material = new THREE.PointsMaterial({
-  color: 0x44ccff,
-  size: 0.02
-})
-
-const points = new THREE.Points(geometry, material)
-scene.add(points)
+scene.add(particles);
 
 function animate() {
-  requestAnimationFrame(animate)
-  points.rotation.y += 0.0006
-  renderer.render(scene, camera)
+  requestAnimationFrame(animate);
+  particles.rotation.y += 0.0005;
+  renderer.render(scene, camera);
 }
-
-animate()
-
-window.addEventListener("resize", () => {
-  camera.aspect = window.innerWidth / window.innerHeight
-  camera.updateProjectionMatrix()
-  renderer.setSize(window.innerWidth, window.innerHeight)
-})
+animate();
