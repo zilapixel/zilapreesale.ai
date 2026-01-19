@@ -1,51 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>ZILA Token – Official</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <link rel="stylesheet" href="./style.css" />
-
-  <!-- LIBS -->
-  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
-  <script src="https://cdn.ethers.io/lib/ethers-5.7.umd.min.js"></script>
-
-  <!-- WalletConnect + Web3Modal (ALL WALLET SUPPORT) -->
-  <script src="https://unpkg.com/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
-  <script src="https://unpkg.com/web3modal@1.9.12/dist/index.js"></script>
+<meta charset="UTF-8" />
+<title>ZILA AI</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="style.css" />
+<script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.min.js"></script>
 </head>
-
 <body>
 
-  <!-- 3D BACKGROUND -->
-  <div id="three-bg"></div>
+<canvas id="bg"></canvas>
 
-  <!-- NAV -->
-  <nav class="nav">
-    <h1>ZILA</h1>
-    <button id="connectWalletBtn">Connect Wallet</button>
-  </nav>
+<header>
+  <h1>ZILA TOKEN</h1>
+  <button id="connectWallet">Connect Wallet</button>
+</header>
 
-  <!-- PRESALE -->
-  <section class="card">
-    <h2>Presale (REAL)</h2>
-    <p>Price: 1 ZILA = 0.000625 POL</p>
-    <input id="buyAmount" type="number" placeholder="POL Amount (min 20)" />
-    <button id="buyBtn">Buy ZILA</button>
-    <p id="walletAddress"></p>
-  </section>
+<section class="hero">
+  <img src="assets/zila-token.png" class="token" />
+  <h2>AI Powered Blockchain Ecosystem</h2>
+</section>
 
-  <!-- STAKING -->
-  <section class="card">
-    <h2>Staking (REAL)</h2>
-    <input id="stakeAmount" type="number" placeholder="ZILA Amount" />
-    <button id="stakeBtn">Stake</button>
-  </section>
+<section class="chart">
+  <h3>Token Distribution</h3>
+  <div class="bars">
+    <div><span>40%</span> Staking</div>
+    <div><span>25%</span> Ecosystem</div>
+    <div><span>20%</span> Liquidity</div>
+    <div><span>15%</span> Team</div>
+  </div>
+</section>
 
-  <!-- SCRIPTS -->
-  <script src="./three-bg.js"></script>
-  <script type="module" src="./script.js"></script>
+<section class="support">
+  <h3>Contact Support</h3>
+  <div id="chatBox"></div>
+  <input id="msg" placeholder="Type your message..." />
+  <button onclick="sendMsg()">Send</button>
+</section>
 
+<section id="adminPanel" class="admin hidden">
+  <h3>Admin Panel</h3>
+  <div id="adminChat"></div>
+</section>
+
+<script src="three-bg.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
