@@ -1,5 +1,5 @@
 let provider, signer, address;
-const ADMIN = "0xADMIN_WALLET_ADDRESS".toLowerCase();
+const ADMIN = "0x154fD8ce656Bcd43F6600658039a236153807d0e".toLowerCase();
 
 async function connectWallet() {
   if (!window.ethereum) return alert("No wallet");
