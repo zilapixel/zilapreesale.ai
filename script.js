@@ -1,46 +1,26 @@
-let provider
-let signer
-let userAddress
-
-const web3Modal = new window.Web3Modal.default({
-  cacheProvider: false,
-  providerOptions: {
-    walletconnect: {
-      package: window.WalletConnectProvider.default,
-      options: {
-        rpc: {
-          137: "https://polygon-rpc.com"
-        }
-      }
-    }
-  }
-})
+let provider, signer, address;
+const ADMIN = "0xADMIN_WALLET_ADDRESS".toLowerCase();
 
 async function connectWallet() {
-  const instance = await web3Modal.connect()
-  provider = new ethers.providers.Web3Provider(instance)
-  signer = provider.getSigner()
-  userAddress = await signer.getAddress()
-  document.getElementById("walletAddress").innerText = userAddress
+  if (!window.ethereum) return alert("No wallet");
+  provider = new ethers.providers.Web3Provider(window.ethereum);
+  await provider.send("eth_requestAccounts", []);
+  signer = provider.getSigner();
+  address = (await signer.getAddress()).toLowerCase();
+
+  if (address === ADMIN) {
+    document.getElementById("adminPanel").classList.remove("hidden");
+  }
 }
+document.getElementById("connectWallet").onclick = connectWallet;
 
-document.getElementById("connectWalletBtn").onclick = connectWallet
+const chatBox = document.getElementById("chatBox");
 
-// === REAL CONTRACTS (ISI SUDAH ADA, TINGGAL JALAN) ===
-const PRESALE_ADDRESS = "0x72cF8781aa3A6D7FD3324CD0dAA8b858461849d7"
-const STAKING_ADDRESS = "0xYOUR_STAKING_CONTRACT"
-
-const PRESALE_ABI = ["function buy() payable"]
-const STAKING_ABI = ["function stake(uint256 amount)"]
-
-document.getElementById("buyBtn").onclick = async () => {
-  const amount = document.getElementById("buyAmount").value
-  const contract = new ethers.Contract(PRESALE_ADDRESS, PRESALE_ABI, signer)
-  await contract.buy({ value: ethers.utils.parseEther(amount) })
-}
-
-document.getElementById("stakeBtn").onclick = async () => {
-  const amount = document.getElementById("stakeAmount").value
-  const contract = new ethers.Contract(STAKING_ADDRESS, STAKING_ABI, signer)
-  await contract.stake(ethers.utils.parseUnits(amount, 18))
+async function sendMsg() {
+  const text = msg.value;
+  chatBox.innerHTML += `<div>You: ${text}</div>`;
+  await fetch("/chat", {
+    method: "POST",
+    body: JSON.stringify({ text, address })
+  });
 }
