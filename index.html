@@ -1,51 +1,169 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ZILA AI</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<link rel="stylesheet" href="style.css">
-<script src="script.js"></script>
-<script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
-<script src="three-bg.js"></script>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+body {
+  background: radial-gradient(circle at top, #0a0a0a, #000);
+  color: white;
+  font-family: Arial;
+}
+
+.card {
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 0 20px rgba(138,43,226,0.2);
+}
+
+.glow {
+  box-shadow: 0 0 25px rgba(138,43,226,0.4);
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 22px;
+  color: #a855f7;
+}
+</style>
 </head>
-<body>
 
-<canvas id="three-bg"></canvas>
+<body class="p-4">
 
-<header>
-  <h1>ZILA TOKEN</h1>
-  <button id="connectWallet">Connect Wallet</button>
-</header>
-
-<section class="hero">
-  <img src="assets/zila-token.png" class="token" />
-  <h2>AI Powered Blockchain Ecosystem</h2>
+<!-- HERO -->
+<section class="text-center mb-10">
+  <h1 class="text-4xl font-bold text-purple-400">ZILA AI</h1>
+  <p class="text-gray-400">AI • Meme • DeFi on Polygon</p>
 </section>
 
-<section class="chart">
-  <h3>Token Distribution</h3>
-  <div class="bars">
-    <div><span>40%</span> Staking</div>
-    <div><span>25%</span> Ecosystem</div>
-    <div><span>20%</span> Liquidity</div>
-    <div><span>15%</span> Team</div>
+<!-- CHART -->
+<section class="mb-10">
+  <div class="card glow">
+    <iframe 
+      src="https://dexscreener.com/polygon/0xa81bfff195d7386894203db5075106b57923a927?embed=1"
+      width="100%" 
+      height="400">
+    </iframe>
   </div>
 </section>
 
-<section class="support">
-  <h3>Contact Support</h3>
-  <div id="chatBox"></div>
-  <input id="msg" placeholder="Type your message..." />
-  <button onclick="sendMsg()">Send</button>
+<!-- SWAP RATIO -->
+<section class="mb-10">
+  <div class="card">
+    <h2 class="title">Swap Ratio (Live)</h2>
+
+    <input id="inputZila" type="number" placeholder="Enter ZILA"
+      class="w-full p-3 mb-3 bg-black border border-purple-500 rounded"/>
+
+    <select id="pair" class="w-full p-3 mb-3 bg-black border border-purple-500 rounded">
+      <option value="usd">ZILA → USDT</option>
+      <option value="wpol">ZILA → WPOL</option>
+    </select>
+
+    <p id="output" class="text-xl text-green-400">Result: 0</p>
+  </div>
 </section>
 
-<section id="adminPanel" class="admin hidden">
-  <h3>Admin Panel</h3>
-  <div id="adminChat"></div>
+<!-- TOKENOMICS -->
+<section class="mb-10">
+  <h2 class="title">Tokenomics</h2>
+  <div class="card">
+    <canvas id="chart"></canvas>
+  </div>
 </section>
 
-<script src="three-bg.js"></script>
-<script src="script.js"></script>
+<!-- ROADMAP -->
+<section class="mb-10">
+  <h2 class="title">Roadmap</h2>
+
+  <div class="space-y-4">
+    <div class="card">
+      <h3 class="text-green-400">Phase 1</h3>
+      <p>Launch, Community, DEX Listing</p>
+    </div>
+
+    <div class="card">
+      <h3 class="text-green-400">Phase 2</h3>
+      <p>NFT, AI Utility, Partnerships</p>
+    </div>
+
+    <div class="card">
+      <h3 class="text-green-400">Phase 3</h3>
+      <p>CEX Listing, Expansion</p>
+    </div>
+  </div>
+</section>
+
+<!-- WHITEPAPER -->
+<section class="mb-10 text-center">
+  <h2 class="title">Whitepaper</h2>
+  <div class="card">
+    <p class="mb-3">ZILA AI Whitepaper</p>
+    <button class="bg-purple-600 px-4 py-2 rounded">Download</button>
+  </div>
+</section>
+
+<!-- JS -->
+<script>
+let priceUSD = 0;
+let priceWPOL = 0;
+
+// FETCH PRICE FROM DEXSCREENER
+async function fetchPrice() {
+  try {
+    const res = await fetch("https://api.dexscreener.com/latest/dex/pairs/polygon/0xa81bfff195d7386894203db5075106b57923a927");
+    const data = await res.json();
+
+    priceUSD = data.pair.priceUsd;
+    priceWPOL = data.pair.priceNative;
+
+  } catch (e) {
+    console.log("Error fetching price");
+  }
+}
+
+// CALCULATE
+function calculate() {
+  const input = document.getElementById("inputZila").value;
+  const pair = document.getElementById("pair").value;
+  let result = 0;
+
+  if(pair === "usd"){
+    result = input * priceUSD;
+  } else {
+    result = input * priceWPOL;
+  }
+
+  document.getElementById("output").innerText = "Result: " + result.toFixed(4);
+}
+
+// EVENTS
+document.getElementById("inputZila").addEventListener("input", calculate);
+document.getElementById("pair").addEventListener("change", calculate);
+
+// INIT
+fetchPrice();
+setInterval(fetchPrice, 5000);
+
+// TOKENOMICS CHART
+new Chart(document.getElementById("chart"), {
+  type: 'doughnut',
+  data: {
+    labels: ["Liquidity","Staking","Marketing","Treasury","Team","Airdrop"],
+    datasets: [{
+      data: [30,25,15,15,10,5]
+    }]
+  }
+});
+</script>
+
 </body>
 </html>
